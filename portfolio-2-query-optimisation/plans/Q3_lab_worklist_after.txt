@@ -1,0 +1,26 @@
+Limit (actual time=0.072..0.211 rows=20 loops=1)
+  Buffers: shared hit=142 read=2
+  ->  Nested Loop (actual time=0.071..0.208 rows=20 loops=1)
+        Buffers: shared hit=142 read=2
+        ->  Nested Loop (actual time=0.061..0.124 rows=20 loops=1)
+              Buffers: shared hit=82 read=2
+              ->  Nested Loop (actual time=0.052..0.073 rows=20 loops=1)
+                    Join Filter: (lt.lab_test_id = lo.lab_test_id)
+                    Rows Removed by Join Filter: 41
+                    Buffers: shared hit=2 read=2
+                    ->  Index Scan using idx_lab_order_pending on lab_order lo (actual time=0.040..0.045 rows=20 loops=1)
+                          Buffers: shared hit=1 read=2
+                    ->  Materialize (actual time=0.000..0.001 rows=3 loops=20)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on lab_test lt (actual time=0.005..0.006 rows=5 loops=1)
+                                Buffers: shared hit=1
+              ->  Index Scan using pk_appointment on appointment a (actual time=0.002..0.002 rows=1 loops=20)
+                    Index Cond: (appointment_id = lo.appointment_id)
+                    Buffers: shared hit=80
+        ->  Index Scan using pk_patient on patient p (actual time=0.003..0.003 rows=1 loops=20)
+              Index Cond: (patient_id = a.patient_id)
+              Buffers: shared hit=60
+Planning:
+  Buffers: shared hit=39
+Planning Time: 0.538 ms
+Execution Time: 0.240 ms

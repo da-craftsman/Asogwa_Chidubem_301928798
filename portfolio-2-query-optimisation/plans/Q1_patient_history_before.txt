@@ -1,0 +1,54 @@
+Sort (actual time=33.490..33.497 rows=14 loops=1)
+  Sort Key: a.starts_at DESC
+  Sort Method: quicksort  Memory: 26kB
+  Buffers: shared hit=4003
+  ->  Nested Loop Left Join (actual time=22.258..33.472 rows=14 loops=1)
+        Buffers: shared hit=4003
+        ->  Hash Join (actual time=22.092..33.264 rows=14 loops=1)
+              Hash Cond: (c.department_id = d.department_id)
+              Buffers: shared hit=3997
+              ->  Hash Join (actual time=22.054..33.221 rows=14 loops=1)
+                    Hash Cond: (a.clinician_id = c.clinician_id)
+                    Buffers: shared hit=3996
+                    ->  Hash Right Join (actual time=22.021..33.181 rows=14 loops=1)
+                          Hash Cond: (dg.appointment_id = a.appointment_id)
+                          Buffers: shared hit=3995
+                          ->  Seq Scan on diagnosis dg (actual time=0.008..6.551 rows=121186 loops=1)
+                                Buffers: shared hit=1228
+                          ->  Hash (actual time=18.688..18.690 rows=14 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                                Buffers: shared hit=2767
+                                ->  Hash Right Join (actual time=13.126..18.662 rows=14 loops=1)
+                                      Hash Cond: (lo.appointment_id = a.appointment_id)
+                                      Buffers: shared hit=2767
+                                      ->  Seq Scan on lab_order lo (actual time=0.009..3.372 rows=60771 loops=1)
+                                            Buffers: shared hit=663
+                                      ->  Hash (actual time=11.229..11.230 rows=14 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                            Buffers: shared hit=2104
+                                            ->  Seq Scan on appointment a (actual time=1.678..11.203 rows=14 loops=1)
+                                                  Filter: (patient_id = 1234)
+                                                  Rows Removed by Filter: 199988
+                                                  Buffers: shared hit=2104
+                    ->  Hash (actual time=0.018..0.019 rows=32 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 11kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on clinician c (actual time=0.005..0.010 rows=32 loops=1)
+                                Buffers: shared hit=1
+              ->  Hash (actual time=0.017..0.018 rows=5 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on department d (actual time=0.010..0.011 rows=5 loops=1)
+                          Buffers: shared hit=1
+        ->  Memoize (actual time=0.003..0.003 rows=0 loops=14)
+              Cache Key: lo.lab_test_id
+              Cache Mode: logical
+              Hits: 10  Misses: 4  Evictions: 0  Overflows: 0  Memory Usage: 1kB
+              Buffers: shared hit=6
+              ->  Index Scan using pk_lab_test on lab_test lt (actual time=0.007..0.007 rows=1 loops=4)
+                    Index Cond: (lab_test_id = lo.lab_test_id)
+                    Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=197
+Planning Time: 1.308 ms
+Execution Time: 33.913 ms

@@ -1,0 +1,31 @@
+Sort (actual time=57.812..57.817 rows=5 loops=1)
+  Sort Key: d.name
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=932 read=83
+  ->  HashAggregate (actual time=57.797..57.805 rows=5 loops=1)
+        Group Key: d.name
+        Batches: 1  Memory Usage: 24kB
+        Buffers: shared hit=932 read=83
+        ->  Hash Join (actual time=0.054..40.363 rows=87788 loops=1)
+              Hash Cond: (c.department_id = d.department_id)
+              Buffers: shared hit=932 read=83
+              ->  Hash Join (actual time=0.041..27.962 rows=87788 loops=1)
+                    Hash Cond: (a.clinician_id = c.clinician_id)
+                    Buffers: shared hit=931 read=83
+                    ->  Index Scan using idx_appointment_starts on appointment a (actual time=0.022..11.461 rows=87788 loops=1)
+                          Index Cond: ((starts_at >= '2025-12-31 23:00:00+00'::timestamp with time zone) AND (starts_at < '2026-12-31 23:00:00+00'::timestamp with time zone))
+                          Buffers: shared hit=930 read=83
+                    ->  Hash (actual time=0.013..0.014 rows=32 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on clinician c (actual time=0.003..0.007 rows=32 loops=1)
+                                Buffers: shared hit=1
+              ->  Hash (actual time=0.008..0.009 rows=5 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on department d (actual time=0.004..0.005 rows=5 loops=1)
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=8 read=1
+Planning Time: 0.287 ms
+Execution Time: 57.864 ms

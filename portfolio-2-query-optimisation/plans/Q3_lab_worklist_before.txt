@@ -1,0 +1,35 @@
+Limit (actual time=36.092..36.100 rows=20 loops=1)
+  Buffers: shared hit=5219
+  ->  Sort (actual time=36.091..36.097 rows=20 loops=1)
+        Sort Key: lo.ordered_at
+        Sort Method: top-N heapsort  Memory: 27kB
+        Buffers: shared hit=5219
+        ->  Nested Loop (actual time=4.919..35.851 rows=817 loops=1)
+              Buffers: shared hit=5219
+              ->  Hash Join (actual time=4.895..34.380 rows=817 loops=1)
+                    Hash Cond: (lo.lab_test_id = lt.lab_test_id)
+                    Buffers: shared hit=2768
+                    ->  Hash Join (actual time=4.879..34.242 rows=817 loops=1)
+                          Hash Cond: (a.appointment_id = lo.appointment_id)
+                          Buffers: shared hit=2767
+                          ->  Seq Scan on appointment a (actual time=0.002..11.963 rows=200002 loops=1)
+                                Buffers: shared hit=2104
+                          ->  Hash (actual time=4.870..4.872 rows=817 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 69kB
+                                Buffers: shared hit=663
+                                ->  Seq Scan on lab_order lo (actual time=0.005..4.704 rows=817 loops=1)
+                                      Filter: (status = ANY ('{ordered,in_progress}'::text[]))
+                                      Rows Removed by Filter: 59954
+                                      Buffers: shared hit=663
+                    ->  Hash (actual time=0.007..0.007 rows=5 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on lab_test lt (actual time=0.003..0.004 rows=5 loops=1)
+                                Buffers: shared hit=1
+              ->  Index Scan using pk_patient on patient p (actual time=0.001..0.001 rows=1 loops=817)
+                    Index Cond: (patient_id = a.patient_id)
+                    Buffers: shared hit=2451
+Planning:
+  Buffers: shared hit=22
+Planning Time: 0.264 ms
+Execution Time: 36.147 ms

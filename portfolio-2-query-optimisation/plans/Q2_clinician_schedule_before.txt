@@ -1,0 +1,20 @@
+Sort (actual time=0.078..0.079 rows=9 loops=1)
+  Sort Key: a.starts_at
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=37
+  ->  Nested Loop (actual time=0.039..0.068 rows=9 loops=1)
+        Buffers: shared hit=37
+        ->  Bitmap Heap Scan on appointment a (actual time=0.030..0.035 rows=9 loops=1)
+              Recheck Cond: ((clinician_id = 1005) AND (starts_at >= '2026-10-19 23:00:00+00'::timestamp with time zone) AND (starts_at < '2026-10-20 23:00:00+00'::timestamp with time zone))
+              Heap Blocks: exact=4
+              Buffers: shared hit=10
+              ->  Bitmap Index Scan on uq_appointment_clinician_slot (actual time=0.026..0.026 rows=9 loops=1)
+                    Index Cond: ((clinician_id = 1005) AND (starts_at >= '2026-10-19 23:00:00+00'::timestamp with time zone) AND (starts_at < '2026-10-20 23:00:00+00'::timestamp with time zone))
+                    Buffers: shared hit=6
+        ->  Index Scan using pk_patient on patient p (actual time=0.002..0.002 rows=1 loops=9)
+              Index Cond: (patient_id = a.patient_id)
+              Buffers: shared hit=27
+Planning:
+  Buffers: shared hit=29
+Planning Time: 0.187 ms
+Execution Time: 0.096 ms
