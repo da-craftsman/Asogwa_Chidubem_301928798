@@ -1,0 +1,79 @@
+-- Concurrency scenarios at The Craftsmen Clinic.
+-- These are NOT run as one file. Open two terminals, start psql in each
+-- (session A and session B), and type the steps in the order numbered.
+-- Before each scenario, run in session A:  \i Asogwa_Chidubem_301928798_P3_Reset.sql
+
+---------------------------------------------------------------------------------
+-- Scenario 1. Lost update: two pharmacists dispense Paracetamol at the same time
+-- Isolation: READ COMMITTED (PostgreSQL default). Stock starts at 500.
+-- The application reads the stock, subtracts in its own code, and writes it back.
+---------------------------------------------------------------------------------
+-- 1 [A] BEGIN;
+-- 2 [A] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;   -- 500
+-- 3 [B] BEGIN;
+-- 4 [B] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;   -- 500
+-- 5 [A] UPDATE portfolio.medication SET stock_quantity = 490 WHERE medication_id = 1;   -- dispensed 10
+-- 6 [A] COMMIT;
+-- 7 [B] UPDATE portfolio.medication SET stock_quantity = 480 WHERE medication_id = 1;   -- dispensed 20
+-- 8 [B] COMMIT;
+-- 9 [A] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;   -- 480, should be 470
+
+---------------------------------------------------------------------------------
+-- Scenario 2. Fix with a row lock: SELECT ... FOR UPDATE (pessimistic locking)
+---------------------------------------------------------------------------------
+-- 1 [A] BEGIN;
+-- 2 [A] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1 FOR UPDATE;   -- 500
+-- 3 [B] BEGIN;
+-- 4 [B] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1 FOR UPDATE;   -- waits
+-- 5 [A] UPDATE portfolio.medication SET stock_quantity = 490 WHERE medication_id = 1;
+-- 6 [A] COMMIT;                                                                              -- B now returns 490
+-- 7 [B] UPDATE portfolio.medication SET stock_quantity = 470 WHERE medication_id = 1;
+-- 8 [B] COMMIT;
+-- 9 [A] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;   -- 470, correct
+
+---------------------------------------------------------------------------------
+-- Scenario 3. Fix with a stricter isolation level: REPEATABLE READ (optimistic)
+---------------------------------------------------------------------------------
+-- 1 [A] BEGIN ISOLATION LEVEL REPEATABLE READ;
+-- 2 [A] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;   -- 500
+-- 3 [B] BEGIN ISOLATION LEVEL REPEATABLE READ;
+-- 4 [B] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;   -- 500
+-- 5 [A] UPDATE portfolio.medication SET stock_quantity = 490 WHERE medication_id = 1;
+-- 6 [A] COMMIT;
+-- 7 [B] UPDATE portfolio.medication SET stock_quantity = 480 WHERE medication_id = 1;
+--       ERROR: could not serialize access due to concurrent update
+-- 8 [B] ROLLBACK;
+-- Retry, as the application would:
+-- 9 [B] BEGIN ISOLATION LEVEL REPEATABLE READ;
+-- 10 [B] SELECT stock_quantity FROM portfolio.medication WHERE medication_id = 1;  -- 490
+-- 11 [B] UPDATE portfolio.medication SET stock_quantity = 470 WHERE medication_id = 1;
+-- 12 [B] COMMIT;                                                                   -- 470, correct
+
+---------------------------------------------------------------------------------
+-- Scenario 4. Double booking: two receptionists book Dr. 1005's 09:00 slot on
+-- 1 December 2026 for different patients at the same moment.
+---------------------------------------------------------------------------------
+-- 1 [A] BEGIN;
+-- 2 [A] SELECT count(*) FROM portfolio.appointment
+--       WHERE clinician_id = 1005 AND starts_at = '2026-12-01 09:00+01';            -- 0: slot looks free
+-- 3 [B] BEGIN;
+-- 4 [B] (same SELECT)                                                               -- 0: looks free to B too
+-- 5 [A] INSERT INTO portfolio.appointment (appointment_id, patient_id, clinician_id, starts_at)
+--       VALUES (900001, 1001, 1005, '2026-12-01 09:00+01');
+-- 6 [B] INSERT INTO portfolio.appointment (appointment_id, patient_id, clinician_id, starts_at)
+--       VALUES (900002, 1002, 1005, '2026-12-01 09:00+01');                       -- waits
+-- 7 [A] COMMIT;
+--       B: ERROR: duplicate key value violates unique constraint "uq_appointment_clinician_slot"
+-- 8 [B] ROLLBACK;
+
+---------------------------------------------------------------------------------
+-- Scenario 5. Deadlock: two pharmacists each dispense both medicines, in opposite order
+---------------------------------------------------------------------------------
+-- 1 [A] BEGIN;
+-- 2 [A] UPDATE portfolio.medication SET stock_quantity = stock_quantity - 10 WHERE medication_id = 1;
+-- 3 [B] BEGIN;
+-- 4 [B] UPDATE portfolio.medication SET stock_quantity = stock_quantity - 5 WHERE medication_id = 2;
+-- 5 [A] UPDATE portfolio.medication SET stock_quantity = stock_quantity - 10 WHERE medication_id = 2;   -- waits for B
+-- 6 [B] UPDATE portfolio.medication SET stock_quantity = stock_quantity - 5 WHERE medication_id = 1;    -- waits for A
+--       After about 1 second: ERROR: deadlock detected (one session is cancelled)
+-- 7 Whichever session got the error: ROLLBACK;   The other session: COMMIT;
