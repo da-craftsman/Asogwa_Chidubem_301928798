@@ -248,7 +248,7 @@ The full execution plans for Portfolio 2 are saved as text in [portfolio-2-query
 
 ## AI use declaration
 
-- **GitHub Copilot** generated the repository's first skeleton, which was later replaced after review against the brief.
+- **GitHub Copilot** generated the repository's first skeleton, which was .
 - **Claude (Anthropic)** reviewed that version against the brief, explained concepts, guided me step by step through each portfolio, and drafted most of the SQL and MongoDB scripts, the README text and the final summary from my own notes and answers.
 - **Google Gemini** was used to look up definitions and terms.
 
