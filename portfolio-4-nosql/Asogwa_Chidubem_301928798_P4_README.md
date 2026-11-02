@@ -1,236 +1,89 @@
 # Portfolio 4 — NoSQL and Advanced Data Models
 
-I used MongoDB collection appointment_events for appointment_booked and appointment_rescheduled events. These are fictional event examples based on appointment, patient, clinician.
+**Case study:** The Craftsmen Clinic (see Portfolio 1).
+**NoSQL model:** document database (MongoDB 7).
 
-## Document model
+## What I did
 
-| Field | Meaning |
+In Portfolio 1, the `lab_order` table deliberately stores only a short result summary. The detailed results are different for every type of test, so I modelled them in MongoDB as documents, one document per completed lab order. Each document uses the same lab order, appointment and patient IDs as PostgreSQL, so the two databases describe the same clinic.
+
+| File | Purpose |
 | --- | --- |
-| _id | Unique string event ID |
-| eventType | One of the two selected case event labels |
-| occurredAt | Native BSON Date; sample timestamps are in 2030 |
-| source | Original entity, primary key and saved JSON snapshot |
-| embedded | Linked record snapshots read with the event |
-| references | Keys for linked sources kept outside the embedded snapshots |
-| details | Event metadata whose fields vary |
+| [LabResults.js](Asogwa_Chidubem_301928798_P4_LabResults.js) | Creates the collection with a validator, inserts six results, runs the queries, tests validation and indexing |
 
-Related patient, clinician details are stored as snapshots with the event. This makes an event readable in one document. It duplicates some information, and later SQL changes do not automatically update the snapshots. PostgreSQL continues to enforce the relational rules.
+## How to run it
 
-## Example document
+MongoDB runs in a Docker container inside the GitHub Codespace; mongosh is the MongoDB shell.
 
-```javascript
-{
-    "_id": "event_000001",
-    "schemaVersion": 1,
-    "simulation": true,
-    "eventType": "appointment_booked",
-    "occurredAt": ISODate("2030-01-01T10:00:00Z"),
-    "source": {
-        "entity": "appointment",
-        "key": {
-            "appointment_id": 5
-        },
-        "snapshot": {
-            "appointment_id": 5,
-            "patient_id": 1,
-            "clinician_id": 3,
-            "starts_at": "2026-11-02T09:00:00Z",
-            "status": "booked",
-            "reason": "Routine visit"
-        }
-    },
-    "embedded": {
-        "patient": [
-            {
-                "key": {
-                    "patient_id": 1
-                },
-                "snapshot": {
-                    "patient_id": 1,
-                    "given_name": "Avery",
-                    "family_name": "Morgan",
-                    "date_of_birth": "1988-04-12",
-                    "active": true
-                },
-                "via": [
-                    "appointment.patient_id → patient"
-                ]
-            }
-        ],
-        "clinician": [
-            {
-                "key": {
-                    "clinician_id": 3
-                },
-                "snapshot": {
-                    "clinician_id": 3,
-                    "display_name": "Dr. Casey Rowan",
-                    "specialty": "Family Medicine",
-                    "active": true
-                },
-                "via": [
-                    "appointment.clinician_id → clinician"
-                ]
-            }
-        ]
-    },
-    "references": {},
-    "details": {
-        "channel": "web"
-    }
-}
+```bash
+docker run -d --name mongo -p 27017:27017 mongo:7    # first time only; afterwards: docker start mongo
+npm install -g mongosh                               # first time only
+mongosh --quiet --file Asogwa_Chidubem_301928798_P4_LabResults.js
 ```
 
-## Queries and results
+The script drops and rebuilds the collection, so it can be run any number of times.
 
-| Query | Returned documents |
+## Why a document model suits lab results
+
+Lab results have a **different structure for each test**:
+
+| Test | What the result contains |
 | --- | --- |
-| Find the first sample event type (up to five documents). | 2 |
-| Find events for the first source record using nested key fields (up to five). | 2 |
-| Find events in the sample time range using a MongoDB Date filter (up to five). | 4 |
-| Count documents for each event type. | 2 |
+| Full Blood Count | Three measurements, each with a value, unit, reference range and flag |
+| Malaria Parasite Test | A method, whether parasites were seen, and if so the species and density |
+| Urinalysis | Mostly text values (trace, negative, 1+) and a list of microscopy findings |
+| Fasting Blood Sugar | One measurement, plus how many hours the patient fasted |
+| Lipid Profile | Four measurements |
 
-## 1. Find the first sample event type (up to five documents).
+Storing this in relational tables means choosing between three poor options:
 
-```javascript
-db.getCollection("appointment_events").find({"eventType":"appointment_booked"}).sort({_id:1}).limit(5).toArray();
-```
+1. **A table per test type.** Five tables today, and a new table plus a schema change every time the lab adds a test.
+2. **One wide table** with a column for every possible measurement. Most columns would be empty in every row.
+3. **One row per measurement** (lab_order_id, name, value, unit). Every value has to share one column type, so text results like "trace" and numbers like 13.8 get mixed; a malaria result's species no longer fits; and rebuilding one report needs many rows.
 
-Selected fields from the returned documents:
+In MongoDB, each result is one document shaped like the test it describes. The two documents below sit in the same collection: a blood count with three measured values, and a positive malaria test with a species and parasite density.
 
-```json
-[
-  {
-    "_id": "event_000001",
-    "eventType": "appointment_booked",
-    "occurredAt": {
-      "$date": "2030-01-01T10:00:00Z"
-    },
-    "source": {
-      "appointment_id": 5
-    }
-  },
-  {
-    "_id": "event_000003",
-    "eventType": "appointment_booked",
-    "occurredAt": {
-      "$date": "2030-01-01T10:02:00Z"
-    },
-    "source": {
-      "appointment_id": 6
-    }
-  }
-]
-```
+![Two documents with different structures](screenshots/Asogwa_Chidubem_301928798_P4_01_Documents.png)
 
-## 2. Find events for the first source record using nested key fields (up to five).
+A new test type needs no schema change; its documents simply have a new shape. And a report is read in one go, because everything about the result is in one document.
 
-```javascript
-db.getCollection("appointment_events").find({"source.key.appointment_id":5}).sort({_id:1}).limit(5).toArray();
-```
+## Design decisions
 
-Selected fields from the returned documents:
+**Flexible, but not unchecked.** A `$jsonSchema` validator requires the fields every result must have: lab_order_id, appointment_id, patient (with patient_id and name), test, reported_at, abnormal and results. It checks their types, but leaves the inside of `results` free to vary by test. Without it, a document with a missing patient would be saved silently.
 
-```json
-[
-  {
-    "_id": "event_000001",
-    "eventType": "appointment_booked",
-    "occurredAt": {
-      "$date": "2030-01-01T10:00:00Z"
-    },
-    "source": {
-      "appointment_id": 5
-    }
-  },
-  {
-    "_id": "event_000002",
-    "eventType": "appointment_rescheduled",
-    "occurredAt": {
-      "$date": "2030-01-01T10:01:00Z"
-    },
-    "source": {
-      "appointment_id": 5
-    }
-  }
-]
-```
+**References to PostgreSQL.** lab_order_id, appointment_id and patient_id match the PostgreSQL rows. PostgreSQL remains the system of record for patients, appointments and lab orders; MongoDB holds the detailed results. Using two databases, each for the data it suits, is called **polyglot persistence**.
 
-## 3. Find events in the sample time range using a MongoDB Date filter (up to five).
+**The patient's name is embedded (denormalised).** Each document stores a copy of the patient's name, so a lab report can be produced without querying PostgreSQL. This breaks the "store each fact once" rule from Portfolio 1 on purpose. If a patient changes their name, older results keep the old one, which is acceptable for a lab report: it should show the name at the time it was issued. The patient_id remains the reliable link.
 
-```javascript
-db.getCollection("appointment_events").find({"occurredAt":{"$gte":ISODate("2030-01-01T10:00:00Z"), "$lt":ISODate("2030-01-01T11:00:00Z")}}).sort({_id:1}).limit(5).toArray();
-```
+**A top-level `abnormal` flag.** Abnormal results are what clinicians need to follow up. Lifting this one yes/no out of the varying `results` lets one simple query find every abnormal result, whatever the test.
 
-Selected fields from the returned documents:
+## Queries, validation and indexing
 
-```json
-[
-  {
-    "_id": "event_000001",
-    "eventType": "appointment_booked",
-    "occurredAt": {
-      "$date": "2030-01-01T10:00:00Z"
-    },
-    "source": {
-      "appointment_id": 5
-    }
-  },
-  {
-    "_id": "event_000002",
-    "eventType": "appointment_rescheduled",
-    "occurredAt": {
-      "$date": "2030-01-01T10:01:00Z"
-    },
-    "source": {
-      "appointment_id": 5
-    }
-  },
-  {
-    "_id": "event_000003",
-    "eventType": "appointment_booked",
-    "occurredAt": {
-      "$date": "2030-01-01T10:02:00Z"
-    },
-    "source": {
-      "appointment_id": 6
-    }
-  },
-  {
-    "_id": "event_000004",
-    "eventType": "appointment_rescheduled",
-    "occurredAt": {
-      "$date": "2030-01-01T10:03:00Z"
-    },
-    "source": {
-      "appointment_id": 6
-    }
-  }
-]
-```
+![Queries, validation and index](screenshots/Asogwa_Chidubem_301928798_P4_02_QueriesAndIndex.png)
 
-## 4. Count documents for each event type.
-
-```javascript
-db.getCollection("appointment_events").aggregate([{"$group":{"_id":"$eventType", "documentCount":{"$sum":1}}}, {"$sort":{"_id":1}}]).toArray();
-```
-
-| _id | documentCount |
+| Query | What it shows |
 | --- | --- |
-| appointment_booked | 2 |
-| appointment_rescheduled | 2 |
+| Q1 Lab history for patient 1234 | Filtering on a field inside an embedded object (`patient.patient_id`) and sorting by date. Returns three results: malaria, lipid profile, fasting blood sugar |
+| Q2 Every abnormal result | The top-level flag finds abnormal results across different test types: three of six |
+| Q3 Malaria parasites seen | Querying a field that only exists in malaria documents (`results.parasites_seen`). Other documents simply don't match |
+| Q4 Results per test | An aggregation pipeline that groups by test and counts total and abnormal results |
 
-## Validation and suitability
+**Validation:** inserting a result with no patient fails with `Document failed validation`.
 
-MongoDB inserted 4 documents. An invalid date type was rejected with code 121 and a repeated event ID with 11000. The collection still contained 4 valid documents. The compound eventType/occurredAt index supports those access fields; this exercise does not measure its speed.
+**Indexing:** before indexing, Q1's plan was `SORT > COLLSCAN`: MongoDB read all 6 documents, then sorted them. After creating an index on (patient.patient_id, reported_at descending), the plan became `FETCH > IXSCAN` and only the patient's 3 documents were examined, already in date order. It's the same principle as the composite index for patient history in Portfolio 2, applied to a document database.
 
-The details field can vary across event types, while the common fields have a validator. Events can be added as separate documents rather than growing one large history record.
+## Where MongoDB would not be the right choice
 
-## Run the script
+The rest of the clinic stays in PostgreSQL. Appointments, prescriptions and stock depend on what Portfolios 1 and 3 showed: foreign keys between tables, check constraints, a unique constraint that prevents double booking, and transactions that update several tables together. A relational database does these naturally. MongoDB supports some of them, but they aren't what it is designed around.
 
-Connect mongosh to a fresh exercise database and run Asogwa_Chidubem_301928798_P4_MongoDB.js. It selects portfolio_nosql, creates the collection, inserts the sample documents and displays the query results. [Implementation evidence](screenshots/Asogwa_Chidubem_301928798_P4_DocumentsAndQueries.png).
+It is also fair to say that PostgreSQL could store these results itself, in a JSONB column on lab_order. For a single small clinic, that would be a reasonable and simpler alternative. A separate document database becomes the better choice when the lab is its own system, when result volumes grow large, or when the results need to be spread across servers, which is the subject of Portfolio 5.
+
+**Other NoSQL models, briefly.** A key-value store such as Redis would suit the clinic's live waiting-room queue: fast, short-lived data looked up by one key. A graph database such as Neo4j would suit a referral network between clinicians and hospitals, where the relationships themselves are what you query.
 
 ## References
 
-- [MongoDB — data modelling](https://www.mongodb.com/docs/manual/data-modeling/)
-
+- MongoDB, Inc. *Schema validation*. MongoDB Manual. https://www.mongodb.com/docs/manual/core/schema-validation/
+- MongoDB, Inc. *Data modeling: embedded and referenced data*. MongoDB Manual. https://www.mongodb.com/docs/manual/data-modeling/
+- MongoDB, Inc. *Aggregation pipeline*. MongoDB Manual. https://www.mongodb.com/docs/manual/core/aggregation-pipeline/
+- MongoDB, Inc. *Explain results*. MongoDB Manual. https://www.mongodb.com/docs/manual/reference/explain-results/
+- PostgreSQL Global Development Group. *JSON types*. PostgreSQL 16 documentation. https://www.postgresql.org/docs/16/datatype-json.html
