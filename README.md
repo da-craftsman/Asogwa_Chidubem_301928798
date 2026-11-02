@@ -5,7 +5,7 @@ Master of Information Technology, MIVA Open University · First Semester Continu
 Individual Practical Database Portfolio (40 marks)
 
 **Case study category:** Hospital / Clinic System
-**Final summary (LMS):** [Asogwa_Chidubem_301928798_FinalSummary.pdf](Asogwa_Chidubem_301928798_FinalSummary.pdf)
+**Final summary (LMS):** [Asogwa_Chidubem_301928798_ReadMeSummary.docx](Asogwa_Chidubem_301928798_FinalSummary.pdf)
 
 ---
 
