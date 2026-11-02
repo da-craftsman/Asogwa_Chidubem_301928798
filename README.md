@@ -26,7 +26,7 @@ Individual Practical Database Portfolio (40 marks)
 
 ## Case study
 
-**The Craftsmen Clinic** is a simulated outpatient clinic in Nigeria, chosen from the brief's **Hospital / Clinic System** category. I chose it because I build hospital management and doctor appointment booking systems, and wanted to understand the database underneath them. The same clinic is used in all five portfolios. All data is synthetic; no real patient data is used.
+**The Craftsmen Clinic** is a simulated outpatient clinic in Nigeria, chosen from the brief's **Hospital / Clinic System** category. I chose it because I intend to build hospital management and doctor booking systems, and wanted to understand the database underneath them. The same clinic is used in all five portfolios. All data is synthetic; no real patient data is used.
 
 | Element | The Craftsmen Clinic |
 | --- | --- |
