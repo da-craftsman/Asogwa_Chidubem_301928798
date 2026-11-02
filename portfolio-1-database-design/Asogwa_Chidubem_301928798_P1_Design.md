@@ -2,7 +2,7 @@
 
 ## Case study
 
-The Craftsmen Clinic is a fictional outpatient clinic in Nigeria. It has a General Medicine unit, a Dermatology unit, an in-house laboratory and a small pharmacy. Patients book appointments with a clinician. During a visit, the clinician records one or more diagnoses, can issue a prescription that the pharmacy dispenses from its stock, and can order laboratory tests. All records in this portfolio are synthetic; no real patient data is used.
+The Craftsmen Clinic is a fictional outpatient clinic in Nigeria. It has five departments, an in-house laboratory and a small pharmacy; General Medicine and Dermatology appear in the Portfolio 1 sample data, and the other three are added by the Portfolio 2 seed data.. Patients book appointments with a clinician. During a visit, the clinician records one or more diagnoses, can issue a prescription that the pharmacy dispenses from its stock, and can order laboratory tests. All records in this portfolio are synthetic; no real patient data is used.
 
 ## Users of the database
 

@@ -1,6 +1,6 @@
 # Portfolio 1 — Database Design and Modelling
 
-**Case study:** The Craftsmen Clinic, a fictional outpatient clinic with General Medicine and Dermatology units, a laboratory and a pharmacy.
+**Case study:** The Craftsmen Clinic, a fictional outpatient clinic with five departments, a laboratory and a pharmacy. The Portfolio 1 sample data covers General Medicine and Dermatology; the other three departments are added by the Portfolio 2 seed data.
 
 ## What I built
 
