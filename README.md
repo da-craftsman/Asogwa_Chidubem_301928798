@@ -234,7 +234,7 @@ The full execution plans for Portfolio 2 are saved as text in [portfolio-2-query
 ## AI use declaration
 
 - **GitHub Copilot** generated the repository's first skeleton, which was later updated with my own data from progressive work while carrying out the Assignment.
-- **Claude (Anthropic)** reviewed that version against the brief, explained concepts, guided me step by step through each portfolio, and drafted most of the SQL and MongoDB scripts, the README text and the final summary from my own notes and answers.
+- **Claude (Anthropic):** after reviewing the skeleton, I realised the project needed real practice and real output from my own work. I instructed Claude to check it against the assignment, explain the concepts I didn't understand, and guide me step by step through each portfolio. Claude drafted most of the SQL and MongoDB scripts, the README text and the final summary from my own notes and answers; I ran, checked and edited all of it.
 - **Google Gemini** was used to look up definitions and terms.
 
 **My own work:** I chose the case study and its scope, and made the practical decisions about tools and data size. I ran every script and command myself in GitHub Codespaces on PostgreSQL 16 and MongoDB 7, captured every screenshot from my own outputs, debugged setup and concurrency problems, and repeated scenarios that went wrong. I checked every figure against my own runs, and reviewed and edited the documentation before submission.
