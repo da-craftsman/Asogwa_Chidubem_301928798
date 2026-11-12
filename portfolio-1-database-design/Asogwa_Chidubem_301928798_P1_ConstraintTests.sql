@@ -19,8 +19,10 @@ INSERT INTO portfolio.appointment (appointment_id, patient_id, clinician_id, sta
 VALUES (101, 2, 3, '2026-11-02T09:00:00Z');
 
 -- 5. Appointments must be for a registered patient. Expected: fk_appointment_patient
+-- Patient 99999999 is outside every ID range used in Portfolios 1-3 (the Portfolio 2
+-- seed adds patients 1000-15999), so this test fails whatever data has been loaded.
 INSERT INTO portfolio.appointment (appointment_id, patient_id, clinician_id, starts_at)
-VALUES (102, 9001, 4, '2026-11-04T09:00:00Z');
+VALUES (102, 99999999, 4, '2026-11-04T09:00:00Z');
 
 -- 6. Only booked, cancelled or completed are valid statuses. Expected: chk_appointment_status
 INSERT INTO portfolio.appointment (appointment_id, patient_id, clinician_id, starts_at, status)
