@@ -85,7 +85,7 @@ A design discussion grounded in the earlier results: replication for PostgreSQL 
 | 2 | Clinician schedule needed no new index: the double-booking constraint already provided one |
 | 3 | Lost update reproduced (stock 480 instead of 470, no error) and fixed two ways; double booking rejected by the unique constraint; deadlock detected and resolved |
 | 4 | Six results in five different document shapes; invalid document rejected; plan changed from `COLLSCAN` (6 documents examined) to `IXSCAN` (3) |
-| 5 | Sharding unnecessary: two years of appointments take 35 MB; consistency chosen over availability for bookings and stock |
+| 5 | Sharding unnecessary: the whole database, with two years of activity, takes 59 MB; consistency chosen over availability for bookings and stock |
 
 ---
 
@@ -118,7 +118,7 @@ Asogwa_Chidubem_301928798/
 │   └── Screenshot_Evidence/  (P4_01 to P4_02)
 └── portfolio-5-distributed-cloud/
     ├── Asogwa_Chidubem_301928798_P5_README.md
-    └── Screenshot_Evidence/  (P5_01)
+    └── Screenshot_Evidence/  (P5_01 to P5_02)
 ```
 
 Every file name starts with `Asogwa_Chidubem_301928798_`, followed by the portfolio number and what the file contains. Screenshots are numbered in the order they were taken.
@@ -214,6 +214,7 @@ Every screenshot is a capture of my own terminal output.
 | 4 | [P4_01_Documents](portfolio-4-nosql/Screenshot_Evidence/Asogwa_Chidubem_301928798_P4_01_Documents.png) | Two lab result documents with different structures |
 | 4 | [P4_02_QueriesAndIndex](portfolio-4-nosql/Screenshot_Evidence/Asogwa_Chidubem_301928798_P4_02_QueriesAndIndex.png) | Queries, validation and index |
 | 5 | [P5_01_Architecture](portfolio-5-distributed-cloud/Screenshot_Evidence/Asogwa_Chidubem_301928798_P5_01_Architecture.png) | Proposed cloud architecture |
+| 5 | [P5_02_DatabaseSize](portfolio-5-distributed-cloud/Screenshot_Evidence/Asogwa_Chidubem_301928798_P5_02_DatabaseSize.png) | Whole clinic database: 59 MB |
 
 The full execution plans for Portfolio 2 are saved as text in [portfolio-2-query-optimisation/plans/](portfolio-2-query-optimisation/plans/).
 

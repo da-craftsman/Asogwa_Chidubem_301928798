@@ -56,7 +56,11 @@ Sharding splits data across servers, so each server holds only part of it. It is
 
 ### Does the clinic need it? Not now.
 
-Portfolio 2 gives real numbers. Two years of activity at a 30-clinician clinic, 200,000 appointments, takes 35 MB including indexes. Even ten branches over ten years would be about 50 times that: under 2 GB. A single modern database server handles hundreds of gigabytes comfortably. Sharding would add complexity (routing queries, rebalancing data, queries that span shards) with no benefit, so **the clinic should not shard.** Replication, covered above, is what it needs.
+Portfolio 2 gives real numbers. After two years of activity at a 30-clinician clinic (15,000 patients, 200,000 appointments, and their diagnoses, prescriptions and lab orders), the whole clinic database, every table and index, takes 59 MB.
+
+![Database size](Screenshot_Evidence/Asogwa_Chidubem_301928798_P5_02_DatabaseSize.png)
+
+Even ten branches over ten years would be about 50 times that: around 3 GB. A single modern database server handles hundreds of gigabytes comfortably. Sharding would add complexity (routing queries, rebalancing data, queries that span shards) with no benefit, so **the clinic should not shard.** Replication, covered above, is what it needs.
 
 ### If it ever did: choosing a shard key
 
