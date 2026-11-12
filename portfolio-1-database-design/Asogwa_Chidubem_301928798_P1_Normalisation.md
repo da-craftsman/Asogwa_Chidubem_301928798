@@ -119,4 +119,4 @@ Lab tests on the paper form were also a list. Applying the same steps:
 
 All ten tables in the final schema are in 3NF. They also meet Boyce–Codd normal form (BCNF): every column that determines other columns is a candidate key. For example, in appointment both appointment_id and (clinician_id, starts_at) are candidate keys, and in department both department_id and name are.
 
-Joining the final tables on their keys reproduces the original 1NF rows exactly, so no information was lost in the decomposition. [JoinCheck.sql](Asogwa_Chidubem_301928798_P1_JoinCheck.sql) runs that join for appointment 6 and returns the same two rows ([screenshot](screenshots/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png)).
+Joining the final tables on their keys reproduces the original 1NF rows exactly, so no information was lost in the decomposition. [JoinCheck.sql](Asogwa_Chidubem_301928798_P1_JoinCheck.sql) runs that join for appointment 6 and returns the same two rows ([screenshot](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png)).

@@ -84,4 +84,4 @@ prescription_item has a composite primary key (prescription_id, medication_id). 
 
 The double-booking rule (one clinician, one start time) is a composite unique constraint on appointment and is listed in the design document.
 
-![ER diagram](../images/Asogwa_Chidubem_301928798_ERDiagram.png)
+![ER diagram](../ERDiagram_Image/Asogwa_Chidubem_301928798_ERDiagram.png)

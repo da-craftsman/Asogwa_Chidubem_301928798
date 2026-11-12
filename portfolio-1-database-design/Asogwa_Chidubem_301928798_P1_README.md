@@ -34,15 +34,15 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P1_JoinCheck.sql
 
 **Tables created:** all ten tables exist in the `portfolio` schema.
 
-![Table list](screenshots/Asogwa_Chidubem_301928798_P1_01_TableList.png)
+![Table list](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_01_TableList.png)
 
 **Constraint tests:** all 12 invalid statements were rejected, each by the constraint it targets, and the sample data was unchanged. The tests cover duplicate keys, missing required values, references to records that don't exist, double booking a clinician, invalid statuses, a malformed ICD-10 code, negative pharmacy stock, a zero prescription quantity, the same medicine twice on one prescription, and deleting a patient who has appointment history.
 
-![Constraint tests](screenshots/Asogwa_Chidubem_301928798_P1_02_ConstraintTests.png)
+![Constraint tests](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_02_ConstraintTests.png)
 
 **Normalisation check:** joining the final tables returns the same two rows as the 1NF table for appointment 6, so the decomposition lost no information.
 
-![Join check](screenshots/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png)
+![Join check](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png)
 
 ## References
 

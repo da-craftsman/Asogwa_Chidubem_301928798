@@ -124,13 +124,13 @@ END $$;
 -- 3. Before: no Portfolio 2 indexes ------------------------------------------
 \t on
 \a
-\o plans/Q1_patient_history_before.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q1_PatientHistory_Before.txt
 SELECT benchmark.plan(1);
-\o plans/Q2_clinician_schedule_before.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q2_ClinicianSchedule_Before.txt
 SELECT benchmark.plan(2);
-\o plans/Q3_lab_worklist_before.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q3_LabWorklist_Before.txt
 SELECT benchmark.plan(3);
-\o plans/Q4_department_report_before.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q4_DepartmentReport_Before.txt
 SELECT benchmark.plan(4);
 \o
 \t off
@@ -160,13 +160,13 @@ ANALYZE;
 -- 5. After --------------------------------------------------------------------
 \t on
 \a
-\o plans/Q1_patient_history_after.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q1_PatientHistory_After.txt
 SELECT benchmark.plan(1);
-\o plans/Q2_clinician_schedule_after.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q2_ClinicianSchedule_After.txt
 SELECT benchmark.plan(2);
-\o plans/Q3_lab_worklist_after.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q3_LabWorklist_After.txt
 SELECT benchmark.plan(3);
-\o plans/Q4_department_report_after.txt
+\o plans/Asogwa_Chidubem_301928798_P2_Q4_DepartmentReport_After.txt
 SELECT benchmark.plan(4);
 \o
 \t off

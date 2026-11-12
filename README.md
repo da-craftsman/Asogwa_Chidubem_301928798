@@ -5,7 +5,7 @@ Master of Information Technology, MIVA Open University · First Semester Continu
 Individual Practical Database Portfolio (40 marks)
 
 **Case study category:** Hospital / Clinic System
-**Final summary (LMS):** [Asogwa_Chidubem_301928798_ReadMeSummary.docx](Asogwa_Chidubem_301928798_FinalSummary.pdf)
+**Final summary (LMS):** [Asogwa_Chidubem_301928798_FinalSummary.pdf](Asogwa_Chidubem_301928798_FinalSummary.pdf) ([Word version](Asogwa_Chidubem_301928798_FinalSummary.docx))
 
 ---
 
@@ -36,7 +36,7 @@ Individual Practical Database Portfolio (40 marks)
 | Key operations | Register patients, book appointments without double booking, record diagnoses, prescribe and dispense medicine, order lab tests and record results, retrieve a patient's full history |
 | Out of scope | Inpatient functions (wards, beds, admissions) and billing |
 
-![ER diagram of The Craftsmen Clinic](images/Asogwa_Chidubem_301928798_ERDiagram.png)
+![ER diagram of The Craftsmen Clinic](ERDiagram_Image/Asogwa_Chidubem_301928798_ERDiagram.png)
 
 *The appointment is the hub of the design: every diagnosis, prescription and lab order belongs to a visit, and every visit links one patient to one clinician.*
 
@@ -95,29 +95,30 @@ A design discussion grounded in the earlier results: replication for PostgreSQL 
 Asogwa_Chidubem_301928798/
 ├── README.md                                   ← you are here
 ├── Asogwa_Chidubem_301928798_FinalSummary.pdf  ← 2–3 page LMS summary
-├── images/
+├── Asogwa_Chidubem_301928798_FinalSummary.docx ← same summary, Word version
+├── ERDiagram_Image/
 │   └── Asogwa_Chidubem_301928798_ERDiagram.png
 ├── portfolio-1-database-design/
 │   ├── Asogwa_Chidubem_301928798_P1_README.md
 │   ├── …_P1_Design.md, …_P1_ERDiagram.md, …_P1_Normalisation.md
 │   ├── …_P1_Schema.sql, …_P1_SampleData.sql, …_P1_ConstraintTests.sql, …_P1_JoinCheck.sql
-│   └── screenshots/          (P1_01 to P1_03)
+│   └── Screenshot_Evidence/  (P1_01 to P1_03)
 ├── portfolio-2-query-optimisation/
 │   ├── Asogwa_Chidubem_301928798_P2_README.md
 │   ├── …_P2_SeedData.sql, …_P2_Queries.sql, …_P2_Benchmark.sql
 │   ├── plans/                (8 execution plans, before and after)
-│   └── screenshots/          (P2_01 to P2_06)
+│   └── Screenshot_Evidence/  (P2_01 to P2_06)
 ├── portfolio-3-transactions-concurrency/
 │   ├── Asogwa_Chidubem_301928798_P3_README.md
 │   ├── …_P3_Reset.sql, …_P3_CommitRollback.sql, …_P3_ConcurrencyScenarios.sql
-│   └── screenshots/          (P3_01 to P3_07)
+│   └── Screenshot_Evidence/  (P3_01 to P3_07)
 ├── portfolio-4-nosql/
 │   ├── Asogwa_Chidubem_301928798_P4_README.md
 │   ├── …_P4_LabResults.js
-│   └── screenshots/          (P4_01 to P4_02)
+│   └── Screenshot_Evidence/  (P4_01 to P4_02)
 └── portfolio-5-distributed-cloud/
     ├── Asogwa_Chidubem_301928798_P5_README.md
-    └── screenshots/          (P5_01)
+    └── Screenshot_Evidence/  (P5_01)
 ```
 
 Every file name starts with `Asogwa_Chidubem_301928798_`, followed by the portfolio number and what the file contains. Screenshots are numbered in the order they were taken.
@@ -193,25 +194,25 @@ Every screenshot is a capture of my own terminal output.
 
 | Portfolio | Screenshot | Shows |
 | --- | --- | --- |
-| 1 | [P1_01_TableList](portfolio-1-database-design/screenshots/Asogwa_Chidubem_301928798_P1_01_TableList.png) | All 10 tables created |
-| 1 | [P1_02_ConstraintTests](portfolio-1-database-design/screenshots/Asogwa_Chidubem_301928798_P1_02_ConstraintTests.png) | 12 invalid statements rejected |
-| 1 | [P1_03_JoinCheck](portfolio-1-database-design/screenshots/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png) | Normalised tables rebuild the original rows |
-| 2 | [P2_01_SeedCounts](portfolio-2-query-optimisation/screenshots/Asogwa_Chidubem_301928798_P2_01_SeedCounts.png) | Row counts after seeding |
-| 2 | [P2_02_ResultsQ1Q2](portfolio-2-query-optimisation/screenshots/Asogwa_Chidubem_301928798_P2_02_ResultsQ1Q2.png) | Patient history and clinician schedule results |
-| 2 | [P2_03_ResultsQ3Q4](portfolio-2-query-optimisation/screenshots/Asogwa_Chidubem_301928798_P2_03_ResultsQ3Q4.png) | Lab worklist and department report results |
-| 2 | [P2_04_BenchmarkResults](portfolio-2-query-optimisation/screenshots/Asogwa_Chidubem_301928798_P2_04_BenchmarkResults.png) | Before and after timings, index sizes, correlation |
-| 2 | [P2_05_Q1PlanBefore](portfolio-2-query-optimisation/screenshots/Asogwa_Chidubem_301928798_P2_05_Q1PlanBefore.png) | Sequential scan before indexing |
-| 2 | [P2_06_Q1PlanAfter](portfolio-2-query-optimisation/screenshots/Asogwa_Chidubem_301928798_P2_06_Q1PlanAfter.png) | Index scan after indexing |
-| 3 | [P3_01_Commit](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_01_Commit.png) | A visit completed in one transaction |
-| 3 | [P3_02_RollbackSavepoint](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_02_RollbackSavepoint.png) | Automatic rollback and savepoint |
-| 3 | [P3_03_LostUpdate](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_03_LostUpdate.png) | Stock ends at 480 instead of 470 |
-| 3 | [P3_04_ForUpdate](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_04_ForUpdate.png) | Row lock: correct stock of 470 |
-| 3 | [P3_05_RepeatableRead](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_05_RepeatableRead.png) | Serialization error and retry |
-| 3 | [P3_06_DoubleBooking](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_06_DoubleBooking.png) | Second booking rejected by the unique constraint |
-| 3 | [P3_07_Deadlock](portfolio-3-transactions-concurrency/screenshots/Asogwa_Chidubem_301928798_P3_07_Deadlock.png) | Deadlock detected and one transaction cancelled |
-| 4 | [P4_01_Documents](portfolio-4-nosql/screenshots/Asogwa_Chidubem_301928798_P4_01_Documents.png) | Two lab result documents with different structures |
-| 4 | [P4_02_QueriesAndIndex](portfolio-4-nosql/screenshots/Asogwa_Chidubem_301928798_P4_02_QueriesAndIndex.png) | Queries, validation and index |
-| 5 | [P5_01_Architecture](portfolio-5-distributed-cloud/screenshots/Asogwa_Chidubem_301928798_P5_01_Architecture.png) | Proposed cloud architecture |
+| 1 | [P1_01_TableList](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_01_TableList.png) | All 10 tables created |
+| 1 | [P1_02_ConstraintTests](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_02_ConstraintTests.png) | 12 invalid statements rejected |
+| 1 | [P1_03_JoinCheck](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png) | Normalised tables rebuild the original rows |
+| 2 | [P2_01_SeedCounts](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_01_SeedCounts.png) | Row counts after seeding |
+| 2 | [P2_02_ResultsQ1Q2](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_02_ResultsQ1Q2.png) | Patient history and clinician schedule results |
+| 2 | [P2_03_ResultsQ3Q4](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_03_ResultsQ3Q4.png) | Lab worklist and department report results |
+| 2 | [P2_04_BenchmarkResults](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_04_BenchmarkResults.png) | Before and after timings, index sizes, correlation |
+| 2 | [P2_05_Q1PlanBefore](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_05_Q1PlanBefore.png) | Sequential scan before indexing |
+| 2 | [P2_06_Q1PlanAfter](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_06_Q1PlanAfter.png) | Index scan after indexing |
+| 3 | [P3_01_Commit](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_01_Commit.png) | A visit completed in one transaction |
+| 3 | [P3_02_RollbackSavepoint](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_02_RollbackSavepoint.png) | Automatic rollback and savepoint |
+| 3 | [P3_03_LostUpdate](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_03_LostUpdate.png) | Stock ends at 480 instead of 470 |
+| 3 | [P3_04_ForUpdate](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_04_ForUpdate.png) | Row lock: correct stock of 470 |
+| 3 | [P3_05_RepeatableRead](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_05_RepeatableRead.png) | Serialization error and retry |
+| 3 | [P3_06_DoubleBooking](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_06_DoubleBooking.png) | Second booking rejected by the unique constraint |
+| 3 | [P3_07_Deadlock](portfolio-3-transactions-concurrency/Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_07_Deadlock.png) | Deadlock detected and one transaction cancelled |
+| 4 | [P4_01_Documents](portfolio-4-nosql/Screenshot_Evidence/Asogwa_Chidubem_301928798_P4_01_Documents.png) | Two lab result documents with different structures |
+| 4 | [P4_02_QueriesAndIndex](portfolio-4-nosql/Screenshot_Evidence/Asogwa_Chidubem_301928798_P4_02_QueriesAndIndex.png) | Queries, validation and index |
+| 5 | [P5_01_Architecture](portfolio-5-distributed-cloud/Screenshot_Evidence/Asogwa_Chidubem_301928798_P5_01_Architecture.png) | Proposed cloud architecture |
 
 The full execution plans for Portfolio 2 are saved as text in [portfolio-2-query-optimisation/plans/](portfolio-2-query-optimisation/plans/).
 
@@ -248,7 +249,7 @@ The full execution plans for Portfolio 2 are saved as text in [portfolio-2-query
 
 ## AI use declaration
 
-- **GitHub Copilot** generated the repository's first skeleton, which was .
+- **GitHub Copilot** generated the repository's first skeleton, which was later updated with my own data from progressive work while carrying out the Assignment.
 - **Claude (Anthropic)** reviewed that version against the brief, explained concepts, guided me step by step through each portfolio, and drafted most of the SQL and MongoDB scripts, the README text and the final summary from my own notes and answers.
 - **Google Gemini** was used to look up definitions and terms.
 

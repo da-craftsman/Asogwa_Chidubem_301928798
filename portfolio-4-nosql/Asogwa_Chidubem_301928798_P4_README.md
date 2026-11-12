@@ -43,7 +43,7 @@ Storing this in relational tables means choosing between three poor options:
 
 In MongoDB, each result is one document shaped like the test it describes. The two documents below sit in the same collection: a blood count with three measured values, and a positive malaria test with a species and parasite density.
 
-![Two documents with different structures](screenshots/Asogwa_Chidubem_301928798_P4_01_Documents.png)
+![Two documents with different structures](Screenshot_Evidence/Asogwa_Chidubem_301928798_P4_01_Documents.png)
 
 A new test type needs no schema change; its documents simply have a new shape. And a report is read in one go, because everything about the result is in one document.
 
@@ -59,7 +59,7 @@ A new test type needs no schema change; its documents simply have a new shape. A
 
 ## Queries, validation and indexing
 
-![Queries, validation and index](screenshots/Asogwa_Chidubem_301928798_P4_02_QueriesAndIndex.png)
+![Queries, validation and index](Screenshot_Evidence/Asogwa_Chidubem_301928798_P4_02_QueriesAndIndex.png)
 
 | Query | What it shows |
 | --- | --- |

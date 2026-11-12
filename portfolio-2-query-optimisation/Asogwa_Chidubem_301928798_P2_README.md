@@ -25,7 +25,7 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P2_Benchmark.sql  # safe to re-run
 
 ## The data
 
-![Row counts after seeding](screenshots/Asogwa_Chidubem_301928798_P2_01_SeedCounts.png)
+![Row counts after seeding](Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_01_SeedCounts.png)
 
 - The generator first lists every free 30-minute slot for each clinician on weekdays between 08:00 and 16:30, then picks 200,000 at random. Picking random times directly would eventually double-book a clinician, and the Portfolio 1 constraint `uq_appointment_clinician_slot` would reject the whole load. This is why there are 30 clinicians: 20 clinicians only have about 194,000 slots in two years.
 - `setseed` fixes the random sequence, so anyone running the script gets identical data and comparable results.
@@ -40,9 +40,9 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P2_Benchmark.sql  # safe to re-run
 | Q3 Lab worklist | Lab scientist | The 20 oldest lab orders still pending |
 | Q4 Department report | Administrator | Appointments, completions and cancellation rate per department for 2026 |
 
-![Results of Q1 and Q2](screenshots/Asogwa_Chidubem_301928798_P2_02_ResultsQ1Q2.png)
+![Results of Q1 and Q2](Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_02_ResultsQ1Q2.png)
 
-![Results of Q3 and Q4](screenshots/Asogwa_Chidubem_301928798_P2_03_ResultsQ3Q4.png)
+![Results of Q3 and Q4](Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_03_ResultsQ3Q4.png)
 
 ## Method
 
@@ -54,7 +54,7 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P2_Benchmark.sql  # safe to re-run
 
 ## Results
 
-![Benchmark results](screenshots/Asogwa_Chidubem_301928798_P2_04_BenchmarkResults.png)
+![Benchmark results](Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_04_BenchmarkResults.png)
 
 | Query | Before (ms) | After (ms) | Faster | Pages before | Pages after |
 | --- | --- | --- | --- | --- | --- |
@@ -69,7 +69,7 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P2_Benchmark.sql  # safe to re-run
 
 **Before:** PostgreSQL read all 200,002 appointments to find the 14 belonging to patient 1234 (`Rows Removed by Filter: 199988`). It then read the whole diagnosis and lab order tables to match them up.
 
-![Q1 plan before indexing](screenshots/Asogwa_Chidubem_301928798_P2_05_Q1PlanBefore.png)
+![Q1 plan before indexing](Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_05_Q1PlanBefore.png)
 
 **Why:** PostgreSQL automatically indexes primary keys and unique constraints, but **not foreign key columns**. `appointment.patient_id`, `diagnosis.appointment_id` and `lab_order.appointment_id` had no index, so every lookup through them was a full scan.
 
@@ -80,7 +80,7 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P2_Benchmark.sql  # safe to re-run
 
 **After:** the plan uses a Bitmap Index Scan on `idx_appointment_patient_starts`, then index lookups into diagnosis and lab_order. Pages touched fell from 4,003 to 108.
 
-![Q1 plan after indexing](screenshots/Asogwa_Chidubem_301928798_P2_06_Q1PlanAfter.png)
+![Q1 plan after indexing](Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_06_Q1PlanAfter.png)
 
 This is the main cost of normalisation from Portfolio 1: a patient's history now lives across six tables and must be joined back together. Indexes on the join columns are what make that affordable.
 
@@ -88,7 +88,7 @@ This is the main cost of normalisation from Portfolio 1: a patient's history now
 
 No index was added for Q2, and none was needed. The double-booking constraint from Portfolio 1, `uq_appointment_clinician_slot` on (clinician_id, starts_at), is enforced by a unique index. That index matches this query exactly: it filters on clinician and a range of start times. A business rule from the design stage turned out to be an optimisation as well.
 
-The "after" time is slightly higher. After the Q4 index was added, the planner switched Q2 from the constraint's index to `idx_appointment_starts` (see `plans/Q2_clinician_schedule_after.txt`). Both are fast, and the difference of 0.02 ms is noise, but it shows that an index added for one query can change the plan of another.
+The "after" time is slightly higher. After the Q4 index was added, the planner switched Q2 from the constraint's index to `idx_appointment_starts` (see `plans/Asogwa_Chidubem_301928798_P2_Q2_ClinicianSchedule_After.txt`). Both are fast, and the difference of 0.02 ms is noise, but it shows that an index added for one query can change the plan of another.
 
 ### Q3 Lab worklist: 310× faster with a partial index
 

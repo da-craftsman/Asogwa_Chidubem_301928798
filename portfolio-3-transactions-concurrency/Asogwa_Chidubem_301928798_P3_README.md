@@ -32,7 +32,7 @@ When a clinician completes appointment 5, five changes must happen together: the
 
 After the commit, appointment 5 is completed, diagnosis B54 is recorded, and Paracetamol stock is 482.
 
-![Commit](screenshots/Asogwa_Chidubem_301928798_P3_01_Commit.png)
+![Commit](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_01_Commit.png)
 
 ### Rollback: a failed step undoes the whole transaction
 
@@ -47,7 +47,7 @@ This is **atomicity**: all of the transaction happens, or none of it. It also sh
 
 While ordering two lab tests, the second is entered with a lab test ID that doesn't exist and fails its foreign key. `ROLLBACK TO SAVEPOINT` undoes only that step. The corrected test is then added and the transaction commits with both valid lab orders. Without the savepoint, the whole transaction, including the first valid order, would have had to be thrown away.
 
-![Rollback and savepoint](screenshots/Asogwa_Chidubem_301928798_P3_02_RollbackSavepoint.png)
+![Rollback and savepoint](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_02_RollbackSavepoint.png)
 
 **Durability**, the last of the ACID properties, is why COMMIT matters: once PostgreSQL confirms a commit, the change is written to its write-ahead log and survives a crash or restart.
 
@@ -69,7 +69,7 @@ Two pharmacists dispense Paracetamol at the same time. Their application reads t
 
 Thirty tablets were dispensed, so the stock should be 470. B calculated its new value from a reading that A's commit had made out of date, and its write replaced A's. Ten tablets disappeared from the records with **no error**, which is what makes lost updates dangerous: the pharmacy would only find out at the next physical stock count.
 
-![Lost update](screenshots/Asogwa_Chidubem_301928798_P3_03_LostUpdate.png)
+![Lost update](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_03_LostUpdate.png)
 
 ### Scenario 2 — Fix with a row lock: SELECT … FOR UPDATE
 
@@ -86,7 +86,7 @@ The same two pharmacists, but each reads the stock with `SELECT … FOR UPDATE`,
 
 B's read returned 490, not 500. B had to wait for A's lock, so by the time it read the row, A's change was committed. This is **pessimistic locking**: assume a conflict will happen and make others wait. (The top of session B's pane in this screenshot still shows the end of Scenario 1; Scenario 2 starts at B's second `BEGIN`.)
 
-![FOR UPDATE](screenshots/Asogwa_Chidubem_301928798_P3_04_ForUpdate.png)
+![FOR UPDATE](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_04_ForUpdate.png)
 
 ### Scenario 3 — Fix with a stricter isolation level: REPEATABLE READ
 
@@ -104,7 +104,7 @@ Both sessions run at **REPEATABLE READ**, where a transaction works from a snaps
 
 Nobody waited this time. Instead, PostgreSQL noticed that B was about to overwrite a row changed by a transaction B never saw, and refused. The application is expected to catch this error and retry the whole transaction, which then reads the up-to-date 490. This is **optimistic concurrency control**: assume conflicts are rare, detect them, and retry.
 
-![Repeatable read](screenshots/Asogwa_Chidubem_301928798_P3_05_RepeatableRead.png)
+![Repeatable read](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_05_RepeatableRead.png)
 
 ### Scenario 4 — Double booking
 
@@ -124,7 +124,7 @@ Both checks said the slot was free, because neither booking existed when they lo
 
 The error shows the time as 08:00 +00: PostgreSQL displays timestamps in UTC, and 08:00 UTC is 09:00 in Lagos.
 
-![Double booking](screenshots/Asogwa_Chidubem_301928798_P3_06_DoubleBooking.png)
+![Double booking](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_06_DoubleBooking.png)
 
 ### Scenario 5 — Deadlock
 
@@ -143,7 +143,7 @@ Each session held the lock the other needed, so neither could ever continue. Pos
 
 The prevention is simple: always lock rows in the same order. If every transaction dispensed medicines in order of medication_id, the second pharmacist would wait at step 4 instead of creating a cycle.
 
-![Deadlock](screenshots/Asogwa_Chidubem_301928798_P3_07_Deadlock.png)
+![Deadlock](Screenshot_Evidence/Asogwa_Chidubem_301928798_P3_07_Deadlock.png)
 
 ## Comparing the control mechanisms
 
