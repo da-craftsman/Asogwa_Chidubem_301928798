@@ -102,7 +102,7 @@ Asogwa_Chidubem_301928798/
 │   ├── Asogwa_Chidubem_301928798_P1_README.md
 │   ├── …_P1_Design.md, …_P1_ERDiagram.md, …_P1_Normalisation.md
 │   ├── …_P1_Schema.sql, …_P1_SampleData.sql, …_P1_ConstraintTests.sql, …_P1_JoinCheck.sql
-│   └── Screenshot_Evidence/  (P1_01 to P1_03)
+│   └── Screenshot_Evidence/  (P1_01 to P1_04)
 ├── portfolio-2-query-optimisation/
 │   ├── Asogwa_Chidubem_301928798_P2_README.md
 │   ├── …_P2_SeedData.sql, …_P2_Queries.sql, …_P2_Benchmark.sql
@@ -194,9 +194,10 @@ Every screenshot is a capture of my own terminal output.
 
 | Portfolio | Screenshot | Shows |
 | --- | --- | --- |
-| 1 | [P1_01_TableList](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_01_TableList.png) | All 10 tables created |
-| 1 | [P1_02_ConstraintTests](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_02_ConstraintTests.png) | 12 invalid statements rejected |
-| 1 | [P1_03_JoinCheck](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png) | Normalised tables rebuild the original rows |
+| 1 | [P1_01_SchemaAndData](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_01_SchemaAndData.png) | Schema created and sample data loaded |
+| 1 | [P1_02_TableList](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_02_TableList.png) | All 10 tables created |
+| 1 | [P1_03_ConstraintTests](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_ConstraintTests.png) | 12 invalid statements rejected |
+| 1 | [P1_04_JoinCheck](portfolio-1-database-design/Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_04_JoinCheck.png) | Normalised tables rebuild the original rows |
 | 2 | [P2_01_SeedCounts](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_01_SeedCounts.png) | Row counts after seeding |
 | 2 | [P2_02_ResultsQ1Q2](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_02_ResultsQ1Q2.png) | Patient history and clinician schedule results |
 | 2 | [P2_03_ResultsQ3Q4](portfolio-2-query-optimisation/Screenshot_Evidence/Asogwa_Chidubem_301928798_P2_03_ResultsQ3Q4.png) | Lab worklist and department report results |

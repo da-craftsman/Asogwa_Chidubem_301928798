@@ -32,17 +32,23 @@ psql -d clinic -f Asogwa_Chidubem_301928798_P1_JoinCheck.sql
 
 ## Results
 
+**Schema and sample data loaded:** the schema script creates the `portfolio` schema and its ten tables in one transaction, then the sample data script inserts the fictional records.
+
+![Schema and sample data loaded](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_01_SchemaAndData.png)
+
 **Tables created:** all ten tables exist in the `portfolio` schema.
 
-![Table list](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_01_TableList.png)
+![Table list](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_02_TableList.png)
 
 **Constraint tests:** all 12 invalid statements were rejected, each by the constraint it targets, and the sample data was unchanged. The tests cover duplicate keys, missing required values, references to records that don't exist, double booking a clinician, invalid statuses, a malformed ICD-10 code, negative pharmacy stock, a zero prescription quantity, the same medicine twice on one prescription, and deleting a patient who has appointment history.
 
-![Constraint tests](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_02_ConstraintTests.png)
+![Constraint tests](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_ConstraintTests.png)
+
+My first run showed only 11 errors: test 5, an appointment for patient 9001, was accepted. I had run the tests after loading the Portfolio 2 seed data, which adds patients 1000 to 15999, so patient 9001 really existed and the foreign key had nothing to reject. The constraint was working; the test data was wrong. I deleted the stray appointment, changed the test to patient 99999999, which no portfolio creates, and re-ran it. The screenshot above is that second run.
 
 **Normalisation check:** joining the final tables returns the same two rows as the 1NF table for appointment 6, so the decomposition lost no information.
 
-![Join check](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_03_JoinCheck.png)
+![Join check](Screenshot_Evidence/Asogwa_Chidubem_301928798_P1_04_JoinCheck.png)
 
 ## References
 
