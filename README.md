@@ -5,7 +5,6 @@ Master of Information Technology, MIVA Open University · First Semester Continu
 Individual Practical Database Portfolio
 
 **Case study category:** Hospital / Clinic System
-**Database CA summary:** [Asogwa_Chidubem_301928798_FinalSummary.pdf](Asogwa_Chidubem_301928798_FinalSummary.pdf) ([Word version](Asogwa_Chidubem_301928798_FinalSummary.docx))
 
 ---
 
@@ -93,8 +92,6 @@ A design discussion grounded in the earlier results: replication for PostgreSQL 
 ```
 Asogwa_Chidubem_301928798/
 ├── README.md
-├── Asogwa_Chidubem_301928798_FinalSummary.pdf  ← database CA summary
-├── Asogwa_Chidubem_301928798_FinalSummary.docx ← database CA summary (Word)
 ├── ERDiagram_Image/
 │   └── Asogwa_Chidubem_301928798_ERDiagram.png
 ├── portfolio-1-database-design/
