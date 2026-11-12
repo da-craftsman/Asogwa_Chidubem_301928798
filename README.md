@@ -2,10 +2,10 @@
 
 **Chidubem Asogwa · 301928798**
 Master of Information Technology, MIVA Open University · First Semester Continuous Assessment, 2026/2027
-Individual Practical Database Portfolio (40 marks)
+Individual Practical Database Portfolio
 
 **Case study category:** Hospital / Clinic System
-**Final summary (LMS):** [Asogwa_Chidubem_301928798_FinalSummary.pdf](Asogwa_Chidubem_301928798_FinalSummary.pdf) ([Word version](Asogwa_Chidubem_301928798_FinalSummary.docx))
+**Database CA summary:** [Asogwa_Chidubem_301928798_FinalSummary.pdf](Asogwa_Chidubem_301928798_FinalSummary.pdf) ([Word version](Asogwa_Chidubem_301928798_FinalSummary.docx))
 
 ---
 
@@ -17,16 +17,15 @@ Individual Practical Database Portfolio (40 marks)
 4. [Repository structure](#repository-structure)
 5. [How to run everything](#how-to-run-everything)
 6. [Evidence index](#evidence-index)
-7. [How this repository meets the brief](#how-this-repository-meets-the-brief)
-8. [Technologies](#technologies)
-9. [AI use declaration](#ai-use-declaration)
-10. [References](#references)
+7. [Technologies](#technologies)
+8. [AI use declaration](#ai-use-declaration)
+9. [References](#references)
 
 ---
 
 ## Case study
 
-**The Craftsmen Clinic** is a simulated outpatient clinic in Nigeria, chosen from the brief's **Hospital / Clinic System** category. I chose it because I intend to build hospital management and doctor booking systems, and wanted to understand the database underneath them. The same clinic is used in all five portfolios. All data is synthetic; no real patient data is used.
+**The Craftsmen Clinic** is a simulated outpatient clinic in Nigeria, in the **Hospital / Clinic System** category. I chose it because I intend to build hospital management and doctor booking systems, and wanted to understand the database underneath them. The same clinic is used in all five portfolios. All data is synthetic; no real patient data is used.
 
 | Element | The Craftsmen Clinic |
 | --- | --- |
@@ -54,7 +53,7 @@ A PostgreSQL schema of 10 tables: nine core entities and one link table (`prescr
 
 ### [Portfolio 2: Query Processing and Optimisation](portfolio-2-query-optimisation/Asogwa_Chidubem_301928798_P2_README.md)
 
-200,000 appointments and related records generated with a reproducible seed script. Four everyday clinic queries measured with `EXPLAIN (ANALYZE, BUFFERS)`, median of 7 runs, before and after indexing. Includes a composite index, a partial index, and two honest cases where an index did not help.
+200,000 appointments and related records generated with a reproducible seed script. Four everyday clinic queries measured with `EXPLAIN (ANALYZE, BUFFERS)`, median of 7 runs, before and after indexing. Includes a composite index, a partial index, and two cases where an index did not help.
 
 [Seed data](portfolio-2-query-optimisation/Asogwa_Chidubem_301928798_P2_SeedData.sql) · [Queries](portfolio-2-query-optimisation/Asogwa_Chidubem_301928798_P2_Queries.sql) · [Benchmark](portfolio-2-query-optimisation/Asogwa_Chidubem_301928798_P2_Benchmark.sql) · [Execution plans](portfolio-2-query-optimisation/plans/)
 
@@ -66,7 +65,7 @@ Commit, rollback and savepoints in real clinic workflows, then five two-session 
 
 ### [Portfolio 4: NoSQL and Advanced Data Models](portfolio-4-nosql/Asogwa_Chidubem_301928798_P4_README.md)
 
-Detailed lab results modelled as MongoDB documents, because every test has a different structure. A `$jsonSchema` validator requires the shared fields while letting each test's results vary. Includes four queries, an aggregation, a validation test and an index, plus an honest discussion of when PostgreSQL would be the better choice.
+Detailed lab results modelled as MongoDB documents, because every test has a different structure. A `$jsonSchema` validator requires the shared fields while letting each test's results vary. Includes four queries, an aggregation, a validation test and an index, plus a discussion of when PostgreSQL would be the better choice.
 
 [Lab results script](portfolio-4-nosql/Asogwa_Chidubem_301928798_P4_LabResults.js)
 
@@ -93,9 +92,9 @@ A design discussion grounded in the earlier results: replication for PostgreSQL 
 
 ```
 Asogwa_Chidubem_301928798/
-├── README.md                                   ← you are here
-├── Asogwa_Chidubem_301928798_FinalSummary.pdf  ← 2–3 page LMS summary
-├── Asogwa_Chidubem_301928798_FinalSummary.docx ← same summary, Word version
+├── README.md
+├── Asogwa_Chidubem_301928798_FinalSummary.pdf  ← database CA summary
+├── Asogwa_Chidubem_301928798_FinalSummary.docx ← database CA summary (Word)
 ├── ERDiagram_Image/
 │   └── Asogwa_Chidubem_301928798_ERDiagram.png
 ├── portfolio-1-database-design/
@@ -217,23 +216,6 @@ Every screenshot is a capture of my own terminal output.
 | 5 | [P5_02_DatabaseSize](portfolio-5-distributed-cloud/Screenshot_Evidence/Asogwa_Chidubem_301928798_P5_02_DatabaseSize.png) | Whole clinic database: 59 MB |
 
 The full execution plans for Portfolio 2 are saved as text in [portfolio-2-query-optimisation/plans/](portfolio-2-query-optimisation/plans/).
-
----
-
-## How this repository meets the brief
-
-| Brief requirement | Where it is |
-| --- | --- |
-| Case study stated at the start, used consistently | [Case study](#case-study); every portfolio uses The Craftsmen Clinic |
-| P1: case study, ER diagram, relational schema, keys, constraints, normalisation | [Portfolio 1](portfolio-1-database-design/Asogwa_Chidubem_301928798_P1_README.md) |
-| P2: SQL queries, results, execution plans, indexing evidence, performance analysis | [Portfolio 2](portfolio-2-query-optimisation/Asogwa_Chidubem_301928798_P2_README.md) |
-| P3: commit, rollback, isolation, concurrency issue and control, evidence | [Portfolio 3](portfolio-3-transactions-concurrency/Asogwa_Chidubem_301928798_P3_README.md) |
-| P4: NoSQL model on the same case study, implementation evidence, suitability | [Portfolio 4](portfolio-4-nosql/Asogwa_Chidubem_301928798_P4_README.md) |
-| P5: replication, sharding, availability, consistency, deployment | [Portfolio 5](portfolio-5-distributed-cloud/Asogwa_Chidubem_301928798_P5_README.md) |
-| SQL scripts, schemas, ER diagrams, NoSQL implementation | Each portfolio folder |
-| Query execution plans and performance results | [plans/](portfolio-2-query-optimisation/plans/) and the Portfolio 2 README |
-| Screenshots, configuration and test results | [Evidence index](#evidence-index) |
-| Final documentation, reflection, AI use declaration | [Final summary](Asogwa_Chidubem_301928798_FinalSummary.pdf) and [AI use declaration](#ai-use-declaration) |
 
 ---
 
